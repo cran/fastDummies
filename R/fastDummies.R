@@ -3,22 +3,24 @@
 #' @param dataset
 #' data.table or data.frame
 #'
-#' @param select_columns
+#' @param select.columns
 #' Vector of column names that you want to create dummy variables from.
 #' Default uses all character or factor columns.
-#' @param ignore_columns
-#' Vector of column names to ignore. Default already ignores numeric columns.
-#' @param remove_original
+#' @param ignore.columns
+#' Vector of column names to ignore. Default ignores all numeric columns.
+#' @param remove.original
 #' Removes the columns used to make dummy variables.
 #' Columns that are not used to make dummy variables are not affected.
-#' @param dummy_columns_only
-#' Removes all columns not to create dummy columns (i.e. numeric columns).
-#' @param return_type
+#' @param dummy.columns.only
+#' Removes all columns that didn't create dummy columns (i.e. numeric columns).
+#' @param remove.first.dummy
+#' Removes the first dummy of every variable that only n-1 Dummies remain
+#' @param return.type
 #' Type of data you want back. Default is data.table (better for use
 #' with large data). Other options are data.frame or matrix.
 #'
 #' @return
-#' data.table, data.frame, or matrix depending on input for return_type.
+#' data.table, data.frame, or matrix depending on input for return.type.
 #' data.table is default.
 #' @export
 #'
@@ -27,24 +29,29 @@
 #' example <- fastDummy(dummies.example)
 #'
 #' # Return data.frame
-#' example <- fastDummy(dummies.example, return_type = "data.frame")
+#' example <- fastDummy(dummies.example, return.type = "data.frame")
 #'
 #' # Only keep created dummy columns
-#' example <- fastDummy(dummies.example, dummy_columns_only = TRUE)
+#' example <- fastDummy(dummies.example, dummy.columns.only = TRUE)
 #'
 #' # Only keep SEX and RACE columns
-#' example <- fastDummy(dummies.example, select_columns = c("Sex", "RACE"))
+#' example <- fastDummy(dummies.example, select.columns = c("Sex", "RACE"))
 #'
 #' # Keep all except SEX column
-#' example <- fastDummy(dummies.example, ignore_columns = "SEX")
+#' example <- fastDummy(dummies.example, ignore.columns = "SEX")
+#'
+#' # Removes the first dummy from every category. Avoids perfect
+#' # multicollinearity issues in models.
+#' example <- fastDummy(dummies.example, remove.first.dummy = TRUE)
 fastDummy <- function(dataset,
-                    select_columns = NULL,
-                    ignore_columns = NULL,
-                    remove_original = TRUE,
-                    dummy_columns_only = FALSE,
-                    return_type = "data.table") {
+                    select.columns = NULL,
+                    ignore.columns = NULL,
+                    remove.original = TRUE,
+                    dummy.columns.only = FALSE,
+                    remove.first.dummy = FALSE,
+                    return.type = "data.table") {
 
-  if (!return_type %in% c("data.table", "data.frame", "matrix")) {
+  if (!return.type %in% c("data.table", "data.frame", "matrix")) {
     stop("Return type must be 'data.table', 'data.frame', or 'matrix'")
   }
 
@@ -52,56 +59,61 @@ fastDummy <- function(dataset,
     dataset <- data.table::as.data.table(dataset)
   }
 
-  if (!is.null(select_columns) && !is.character(select_columns)) {
-    stop("select_columns input must be characters")
+  if (!is.null(select.columns) && !is.character(select.columns)) {
+    stop("select.columns input must be characters")
   }
 
-  if (!is.null(ignore_columns) && !is.character(ignore_columns)) {
-    stop("ignore_columns input must be characters")
+  if (!is.null(ignore.columns) && !is.character(ignore.columns)) {
+    stop("ignore.columns input must be characters")
   }
 
 
-  char_cols <- names(dataset)[sapply(dataset, class) %in%
+  char.cols <- names(dataset)[sapply(dataset, class) %in%
                                 c("character", "factor")]
 
-  if (!is.null(select_columns)) {
-    char_cols <- select_columns
-    char_cols <- char_cols[char_cols %in% names(dataset)]
-    if (length(char_cols) == 0) {
+  if (!is.null(select.columns)) {
+    char.cols <- select.columns
+    char.cols <- char.cols[char.cols %in% names(dataset)]
+    if (length(char.cols) == 0) {
       stop("No remaining columns. Please use correct column names.")
     }
   }
 
-  if (!is.null(ignore_columns)) {
-    char_cols <- char_cols[!char_cols %in% ignore_columns]
-    if (length(char_cols) == 0) {
+  if (!is.null(ignore.columns)) {
+    char.cols <- char.cols[!char.cols %in% ignore.columns]
+    if (length(char.cols) == 0) {
       stop("No remaining columns. Please use correct column names.")
     }
   }
 
-  if (dummy_columns_only) {
-    to_remove <- names(dataset)[!names(dataset) %in% char_cols]
-    dataset[, (to_remove) := NULL]
+  if (dummy.columns.only) {
+    to.remove <- names(dataset)[!names(dataset) %in% char.cols]
+    dataset[, (to.remove) := NULL]
   }
 
-  for (col_name in char_cols) {
-    unique_vals <- unique(dataset[, get(col_name)])
-    dataset[, (paste0(col_name, "_", unique_vals)) := 0]
-    for (unique_values in unique_vals) {
-      dataset[get(col_name) == unique_values,
-              (paste0(col_name, "_", unique_values)) := 1]
+  for (col.name in char.cols) {
+    unique.vals <- unique(dataset[, get(col.name)])
+
+    if (remove.first.dummy) {
+      unique.vals = unique.vals[-1]
+    }
+
+    dataset[, (paste0(col.name, ".", unique.vals)) := 0]
+    for (unique.values in unique.vals) {
+      dataset[get(col.name) == unique.values,
+              (paste0(col.name, ".", unique.values)) := 1]
     }
   }
 
-  if (remove_original) {
-    dataset[, (char_cols) := NULL]
+  if (remove.original) {
+    dataset[, (char.cols) := NULL]
   }
 
-  if (return_type == "data.table") {
+  if (return.type == "data.table") {
     return(dataset)
-  } else if (return_type == "data.frame") {
+  } else if (return.type == "data.frame") {
     return(as.data.frame(dataset))
-  } else if (return_type == "matrix") {
+  } else if (return.type == "matrix") {
     return(as.matrix(dataset))
   }
 }
@@ -110,12 +122,12 @@ fastDummy <- function(dataset,
 #'
 #' A dataset containing Census results from the American Community Survey 2015
 #'
-#' @format A data frame with 100000 rows and 17 variables:
+#' @format A data frame with 100,000 rows and 17 variables:
 #' \describe{
-#'   \item{YEAR}{Year of surey}
-#'   \item{STATEFIP}{FIP ID for the state}
-#'   \item{COUNTYFIPS}{FIP ID for the county}
-#'   \item{OWNERSHP}{If the respondent owns their home}
+#'   \item{YEAR}{Year of the survey}
+#'   \item{STATEFIP}{FIPS ID for the state}
+#'   \item{COUNTYFIPS}{FIPS ID for the county}
+#'   \item{OWNERSHP}{Respondent's ownership status for their home}
 #'   \item{PERWT}{Survey weight for the respondent}
 #'   \item{NCHILD}{Number of children in the home}
 #'   \item{SEX}{Sex of the respondent}

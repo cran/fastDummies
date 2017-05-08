@@ -4,12 +4,12 @@
 \name{dummies.example}
 \alias{dummies.example}
 \title{United States Census data for 2015}
-\format{A data frame with 100000 rows and 17 variables:
+\format{A data frame with 100,000 rows and 17 variables:
 \describe{
-  \item{YEAR}{Year of surey}
-  \item{STATEFIP}{FIP ID for the state}
-  \item{COUNTYFIPS}{FIP ID for the county}
-  \item{OWNERSHP}{If the respondent owns their home}
+  \item{YEAR}{Year of the survey}
+  \item{STATEFIP}{FIPS ID for the state}
+  \item{COUNTYFIPS}{FIPS ID for the county}
+  \item{OWNERSHP}{Respondent's ownership status for their home}
   \item{PERWT}{Survey weight for the respondent}
   \item{NCHILD}{Number of children in the home}
   \item{SEX}{Sex of the respondent}
