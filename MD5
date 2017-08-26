@@ -1,7 +1,10 @@
-77cef0f84ba540b160948de40e044e3d *DESCRIPTION
-ee7e45fc2d724f2a3296008b717b0ab0 *NAMESPACE
-08119c543618a57d7875df49c7f938ba *R/fastDummies.R
+434487d8485d5706c32400b2db1c0941 *DESCRIPTION
+44f5c7bf5949b47017cd3acb9102dd1f *NAMESPACE
+f57094b913459539b1d2390fbd6e67ed *R/fastDummies.R
 5128d85e42e6a392f3a69064fe460b87 *README.md
-124402651905ad47072960096a16954a *data/dummies.example.rda
-1e74b499aa1affe7923a9daa400226d7 *man/dummies.example.Rd
-fecdfa7a4a6b5013d86aba048f7a6eb0 *man/fastDummy.Rd
+fdeb1066ed112f0e4bb80b0a44a611fb *data/dummies_example.rda
+47f6cc658cc9bd4e13e88940150729af *data/dummy_rows_example.rda
+a333cc83099b1f11b56fa65639fcefb9 *man/dummies_example.Rd
+b6dae42f11105548ee0d06cb84bc2f02 *man/dummy_cols.Rd
+2e574f69327e5a24e8dbaf7cd5ccacfa *man/dummy_rows.Rd
+5e46df831a1b6d31653b33e70955079e *man/dummy_rows_example.Rd
