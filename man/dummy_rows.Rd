@@ -4,24 +4,25 @@
 \alias{dummy_rows}
 \title{Fast creation of dummy rows}
 \usage{
-dummy_rows(data, select_columns = NULL, dummy_value = NA,
+dummy_rows(.data, select_columns = NULL, dummy_value = NA,
   dummy_indicator = FALSE)
 }
 \arguments{
-\item{data}{An object with the data set you want to make dummy columns from.}
+\item{.data}{An object with the data set you want to make dummy columns from.}
 
 \item{select_columns}{If NULL (default), uses all character, factor, and Date columns to produce categories
 to make the dummy rows by. If not NULL, you manually enter a string or vector of strings of columns name(s).}
 
 \item{dummy_value}{Value of the row for columns that are not selected.
-Default is a value of 0.}
+Default is a value of NA.}
 
 \item{dummy_indicator}{Adds binary column to say if row is dummy or not (i.e. included in
 original data or not)}
 }
 \value{
-A data.frame with same number of columns as inputted data and original
-rows plus the newly created dummy rows
+A data.frame (or tibble or data.table, depending on input data type) with
+same number of columns as inputted data and original rows plus the newly
+created dummy rows
 }
 \description{
 dummy_rows() quickly creates dummy rows to fill in missing rows

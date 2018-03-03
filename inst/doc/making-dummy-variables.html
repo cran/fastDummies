@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jacob Kaplan" />
 
-<meta name="date" content="2018-01-05" />
+<meta name="date" content="2018-03-03" />
 
 <title>Making dummy variables with dummy_cols()</title>
 
@@ -280,7 +280,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Making dummy variables with dummy_cols()</h1>
 <h4 class="author"><em>Jacob Kaplan</em></h4>
-<h4 class="date"><em>2018-01-05</em></h4>
+<h4 class="date"><em>2018-03-03</em></h4>
 
 
 
@@ -290,18 +290,18 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">animals</th>
+<th align="left">animals</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">dog</td>
+<td align="left">dog</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">dog</td>
+<td align="left">dog</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">cat</td>
+<td align="left">cat</td>
 </tr>
 </tbody>
 </table>
@@ -370,30 +370,30 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: right;">numbers</th>
-<th style="text-align: left;">gender</th>
-<th style="text-align: left;">animals</th>
-<th style="text-align: left;">dates</th>
+<th align="right">numbers</th>
+<th align="left">gender</th>
+<th align="left">animals</th>
+<th align="left">dates</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2012-01-01</td>
+<td align="right">1</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2012-01-01</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2011-12-31</td>
+<td align="right">2</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2011-12-31</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">female</td>
-<td style="text-align: left;">cat</td>
-<td style="text-align: left;">2012-01-01</td>
+<td align="right">3</td>
+<td align="left">female</td>
+<td align="left">cat</td>
+<td align="left">2012-01-01</td>
 </tr>
 </tbody>
 </table>
@@ -403,46 +403,46 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: right;">numbers</th>
-<th style="text-align: left;">gender</th>
-<th style="text-align: left;">animals</th>
-<th style="text-align: left;">dates</th>
-<th style="text-align: right;">gender_male</th>
-<th style="text-align: right;">gender_female</th>
-<th style="text-align: right;">animals_dog</th>
-<th style="text-align: right;">animals_cat</th>
+<th align="right">numbers</th>
+<th align="left">gender</th>
+<th align="left">animals</th>
+<th align="left">dates</th>
+<th align="right">gender_male</th>
+<th align="right">gender_female</th>
+<th align="right">animals_dog</th>
+<th align="right">animals_cat</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2012-01-01</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
+<td align="right">1</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2012-01-01</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2011-12-31</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
+<td align="right">2</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2011-12-31</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">female</td>
-<td style="text-align: left;">cat</td>
-<td style="text-align: left;">2012-01-01</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td align="right">3</td>
+<td align="left">female</td>
+<td align="left">cat</td>
+<td align="left">2012-01-01</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
@@ -452,42 +452,42 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: right;">numbers</th>
-<th style="text-align: left;">gender</th>
-<th style="text-align: left;">animals</th>
-<th style="text-align: left;">dates</th>
-<th style="text-align: right;">numbers_1</th>
-<th style="text-align: right;">numbers_2</th>
-<th style="text-align: right;">numbers_3</th>
+<th align="right">numbers</th>
+<th align="left">gender</th>
+<th align="left">animals</th>
+<th align="left">dates</th>
+<th align="right">numbers_1</th>
+<th align="right">numbers_2</th>
+<th align="right">numbers_3</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2012-01-01</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td align="right">1</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2012-01-01</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2011-12-31</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0</td>
+<td align="right">2</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2011-12-31</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">female</td>
-<td style="text-align: left;">cat</td>
-<td style="text-align: left;">2012-01-01</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
+<td align="right">3</td>
+<td align="left">female</td>
+<td align="left">cat</td>
+<td align="left">2012-01-01</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
@@ -497,38 +497,38 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: right;">numbers</th>
-<th style="text-align: left;">gender</th>
-<th style="text-align: left;">animals</th>
-<th style="text-align: left;">dates</th>
-<th style="text-align: right;">gender_female</th>
-<th style="text-align: right;">animals_cat</th>
+<th align="right">numbers</th>
+<th align="left">gender</th>
+<th align="left">animals</th>
+<th align="left">dates</th>
+<th align="right">gender_female</th>
+<th align="right">animals_cat</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2012-01-01</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td align="right">1</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2012-01-01</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">male</td>
-<td style="text-align: left;">dog</td>
-<td style="text-align: left;">2011-12-31</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
+<td align="right">2</td>
+<td align="left">male</td>
+<td align="left">dog</td>
+<td align="left">2011-12-31</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">female</td>
-<td style="text-align: left;">cat</td>
-<td style="text-align: left;">2012-01-01</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
+<td align="right">3</td>
+<td align="left">female</td>
+<td align="left">cat</td>
+<td align="left">2012-01-01</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
