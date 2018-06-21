@@ -2,7 +2,7 @@ Package: fastDummies
 Type: Package
 Title: Fast Creation of Dummy (Binary) Columns and Rows from
         Categorical Variables
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(
     person("Jacob", "Kaplan", email = "jkkaplan6@gmail.com", role = c("aut", "cre")), 
     person("Benjamin", "Schlegel", email = "kontakt@benjaminschlegl.ch", role =  "ctb"))
@@ -18,9 +18,9 @@ RoxygenNote: 6.0.1
 Suggests: testthat, knitr, rmarkdown, covr
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-03-03 22:18:56 UTC; user
+Packaged: 2018-06-21 21:00:20 UTC; user
 Author: Jacob Kaplan [aut, cre],
   Benjamin Schlegel [ctb]
 Maintainer: Jacob Kaplan <jkkaplan6@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-03-03 22:24:29 UTC
+Date/Publication: 2018-06-21 21:09:44 UTC
