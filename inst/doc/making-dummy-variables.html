@@ -12,17 +12,17 @@
 
 <meta name="author" content="Jacob Kaplan" />
 
-<meta name="date" content="2018-06-21" />
+<meta name="date" content="2019-04-21" />
 
 <title>Making dummy variables with dummy_cols()</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -35,13 +35,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -83,7 +81,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -271,6 +291,9 @@ code > span.al { color: #ff0000; font-weight: bold; }
 code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
+
+
+
 </head>
 
 <body>
@@ -279,8 +302,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <h1 class="title toc-ignore">Making dummy variables with dummy_cols()</h1>
-<h4 class="author"><em>Jacob Kaplan</em></h4>
-<h4 class="date"><em>2018-06-21</em></h4>
+<h4 class="author">Jacob Kaplan</h4>
+<h4 class="date">2019-04-21</h4>
 
 
 
@@ -360,13 +383,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>With an example like this, it is fairly easy to make the dummy columns yourself. <code>dummy_cols()</code> automates the process, and is useful when you have many columns to general dummy variables from or with many categories within the column.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">fastDummies_example &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">numbers =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">                    <span class="dt">gender  =</span> <span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>),</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">                    <span class="dt">animals =</span> <span class="kw">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;dog&quot;</span>, <span class="st">&quot;cat&quot;</span>),</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">                    <span class="dt">dates   =</span> <span class="kw">as.Date</span>(<span class="kw">c</span>(<span class="st">&quot;2012-01-01&quot;</span>, <span class="st">&quot;2011-12-31&quot;</span>,</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">                                          <span class="st">&quot;2012-01-01&quot;</span>)),</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">                    <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">knitr<span class="op">::</span><span class="kw">kable</span>(fastDummies_example)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">fastDummies_example &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">numbers =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb1-2" title="2">                    <span class="dt">gender  =</span> <span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>),</a>
+<a class="sourceLine" id="cb1-3" title="3">                    <span class="dt">animals =</span> <span class="kw">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;dog&quot;</span>, <span class="st">&quot;cat&quot;</span>),</a>
+<a class="sourceLine" id="cb1-4" title="4">                    <span class="dt">dates   =</span> <span class="kw">as.Date</span>(<span class="kw">c</span>(<span class="st">&quot;2012-01-01&quot;</span>, <span class="st">&quot;2011-12-31&quot;</span>,</a>
+<a class="sourceLine" id="cb1-5" title="5">                                          <span class="st">&quot;2012-01-01&quot;</span>)),</a>
+<a class="sourceLine" id="cb1-6" title="6">                    <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb1-7" title="7">knitr<span class="op">::</span><span class="kw">kable</span>(fastDummies_example)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -398,8 +421,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>The object <strong>fastDummies_example</strong> has two character type columns, one integer column, and a Date column. By default, <code>dummy_cols()</code> will make dummy variables from factor or character columns only. This is because in most cases those are the only types of data you want dummy variables from. If those are the only columns you want, then the function takes your data set as the first parameter and returns a data.frame with the newly created variables appended to the end of the original data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example)</a>
+<a class="sourceLine" id="cb2-2" title="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -447,8 +470,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>In some situations, you would want columns with types other than factor and character to generate dummy variables. For example, a column of years would be numeric but could be well-suited for making into dummy variables depending on your analysis. Use the <em>select_columns</em> parameter to select specific columns to make dummy variables from.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">select_columns =</span> <span class="st">&quot;numbers&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">select_columns =</span> <span class="st">&quot;numbers&quot;</span>)</a>
+<a class="sourceLine" id="cb3-2" title="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -492,8 +515,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>The final option for <code>dummy_cols()</code> is <em>remove_first_dummy</em> which by default is FALSE. If TRUE, it removes the first dummy variable created from each column. This is done to avoid multicollinearity in a multiple regression model caused by included all dummy variables. The “first” dummy variable is the one at the top of the rows (i.e. the first value that is not NA).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">remove_first_dummy =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">remove_first_dummy =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
