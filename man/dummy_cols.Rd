@@ -5,7 +5,8 @@
 \title{Fast creation of dummy variables}
 \usage{
 dummy_cols(.data, select_columns = NULL, remove_first_dummy = FALSE,
-  remove_most_frequent_dummy = FALSE, sort_columns = FALSE)
+  remove_most_frequent_dummy = FALSE, sort_columns = FALSE,
+  ignore_na = FALSE, split = NULL)
 }
 \arguments{
 \item{.data}{An object with the data set you want to make dummy columns from.}
@@ -21,6 +22,16 @@ remain. If there is a tie for most frequent, will remove the first
 (by alphabetical order) category that is tied for most frequent.}
 
 \item{sort_columns}{Sorts columns following factor order.}
+
+\item{ignore_na}{If TRUE, ignores any NA values in the column. If FALSE (default), then it
+will make a dummy column for value_NA and give a 1 in any row which has a
+NA value.}
+
+\item{split}{A string to split a column when multiple categories are in the cell. For
+example, if a variable is Pets and the rows are "cat", "dog", and "turtle",
+each of these pets would become its own dummy column. If one row is "cat, dog",
+then a split value of "," this row would have a value of 1 for both the cat
+and dog dummy columns.}
 }
 \value{
 A data.frame (or tibble or data.table, depending on input data type) with
@@ -29,9 +40,9 @@ created dummy columns.
 }
 \description{
 dummy_cols() quickly creates dummy (binary) columns from character and
-factor type columns in the inputted data. This function is useful for
-statistical analysis when you want binary columns rather than
-character columns.
+factor type columns in the inputted data (and numeric columns if specified.)
+This function is useful for statistical analysis when you want binary
+columns rather than character columns.
 }
 \examples{
 crime <- data.frame(city = c("SF", "SF", "NYC"),
