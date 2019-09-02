@@ -20,8 +20,6 @@
 #' Removes the most frequently observed category such that only n-1 dummies
 #' remain. If there is a tie for most frequent, will remove the first
 #' (by alphabetical order) category that is tied for most frequent.
-#' @param sort_columns
-#' Sorts columns following factor order.
 #' @param ignore_na
 #' If TRUE, ignores any NA values in the column. If FALSE (default), then it
 #' will make a dummy column for value_NA and give a 1 in any row which has a
@@ -52,7 +50,6 @@ dummy_cols <- function(.data,
                        select_columns = NULL,
                        remove_first_dummy = FALSE,
                        remove_most_frequent_dummy = FALSE,
-                       sort_columns = FALSE,
                        ignore_na = FALSE,
                        split = NULL) {
 
@@ -100,7 +97,24 @@ dummy_cols <- function(.data,
 
 
   for (col_name in char_cols) {
-    unique_vals <- as.character(unique(.data[[col_name]]))
+    # If factor type, order by assigned levels
+    if (is.factor(.data[[col_name]])) {
+      unique_vals <- levels(.data[[col_name]])
+      if (any(is.na(.data[[col_name]]))) {
+        unique_vals <- c(unique_vals, NA)
+      }
+      # Else by order values appear.
+    } else {
+      unique_vals <- unique(.data[[col_name]])
+    }
+    unique_vals <- as.character(unique_vals)
+
+    # If there is a split value, splits up the unique_vals by that value
+    # and keeps only the unique ones.
+    if (!is.null(split)) {
+      unique_vals <- unique(trimws(unlist(strsplit(unique_vals, split = split))))
+    }
+
     if (ignore_na) {
       unique_vals <- unique_vals[!is.na(unique_vals)]
     }
@@ -122,34 +136,40 @@ dummy_cols <- function(.data,
       unique_vals <- unique_vals[-1]
     }
 
-    if (sort_columns) {
-      idx <- stats::na.exclude(match(levels(.data[[col_name]]), unique_vals))
-      unique_vals <- unique_vals[idx]
-    }
-
     data.table::alloc.col(.data, ncol(.data) + length(unique_vals))
     data.table::set(.data, j = paste0(col_name, "_", unique_vals), value = 0L)
     for (unique_value in unique_vals) {
       data.table::set(.data, i =
                         which(data.table::chmatch(
                           as.character(.data[[col_name]]),
-                          unique_value) == 1L),
+                          unique_value, nomatch = 0) == 1L),
                       j = paste0(col_name, "_", unique_value), value = 1L)
 
+
+      # Sets NA values to NA, only for columns that are not the NA columns
+      if (!is.na(unique_value)) {
+      data.table::set(.data, i =
+                        which(is.na(.data[[col_name]])),
+                      j = paste0(col_name, "_", unique_value), value = NA)
+      }
+
       if (!is.null(split)) {
-        max_split_length <- max(sapply(strsplit(.data[[col_name]], split), length))
+        max_split_length <- max(sapply(strsplit(as.character(.data[[col_name]]),
+                                                split = split), length))
         for (split_length in 1:max_split_length) {
           data.table::set(.data, i =
                             which(data.table::chmatch(
-                              as.character(trimws(sapply(strsplit(.data[[col_name]], split),
-                                                  `[`, split_length))),
-                              unique_value) == 1L),
+                              as.character(trimws(sapply(strsplit(as.character(.data[[col_name]]),
+                                                                  split = split),
+                                                         `[`, split_length))),
+                              unique_value, nomatch = 0) == 1L),
                           j = paste0(col_name, "_", unique_value), value = 1L)
+
         }
-
-
+        if (is.na(unique_value)) {
+          .data[[paste0(col_name, "_", unique_value)]][which(!is.na(.data[[col_name]]))] <- 0
+        }
       }
-
     }
   }
 
@@ -157,9 +177,6 @@ dummy_cols <- function(.data,
   return(.data)
 
 }
-
-test <- data.frame(act = c("research", "research", "teaching", "research teaching", "teaching, research"),
-                   stringsAsFactors = FALSE)
 
 
 #' Fast creation of dummy variables
