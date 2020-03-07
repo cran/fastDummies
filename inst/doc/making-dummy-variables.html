@@ -1,46 +1,59 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Jacob Kaplan" />
 
-<meta name="date" content="2019-11-28" />
+<meta name="date" content="2020-03-07" />
 
 <title>Making dummy variables with dummy_cols()</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -49,9 +62,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -118,9 +131,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -289,7 +299,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -304,7 +315,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Making dummy variables with dummy_cols()</h1>
 <h4 class="author">Jacob Kaplan</h4>
-<h4 class="date">2019-11-28</h4>
+<h4 class="date">2020-03-07</h4>
 
 
 
@@ -384,13 +395,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>With an example like this, it is fairly easy to make the dummy columns yourself. <code>dummy_cols()</code> automates the process, and is useful when you have many columns to general dummy variables from or with many categories within the column.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">fastDummies_example &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">numbers =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb1-2" title="2">                    <span class="dt">gender  =</span> <span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>),</a>
-<a class="sourceLine" id="cb1-3" title="3">                    <span class="dt">animals =</span> <span class="kw">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;dog&quot;</span>, <span class="st">&quot;cat&quot;</span>),</a>
-<a class="sourceLine" id="cb1-4" title="4">                    <span class="dt">dates   =</span> <span class="kw">as.Date</span>(<span class="kw">c</span>(<span class="st">&quot;2012-01-01&quot;</span>, <span class="st">&quot;2011-12-31&quot;</span>,</a>
-<a class="sourceLine" id="cb1-5" title="5">                                          <span class="st">&quot;2012-01-01&quot;</span>)),</a>
-<a class="sourceLine" id="cb1-6" title="6">                    <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb1-7" title="7">knitr<span class="op">::</span><span class="kw">kable</span>(fastDummies_example)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>fastDummies_example &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">numbers =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,</span>
+<span id="cb1-2"><a href="#cb1-2"></a>                    <span class="dt">gender  =</span> <span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>),</span>
+<span id="cb1-3"><a href="#cb1-3"></a>                    <span class="dt">animals =</span> <span class="kw">c</span>(<span class="st">&quot;dog&quot;</span>, <span class="st">&quot;dog&quot;</span>, <span class="st">&quot;cat&quot;</span>),</span>
+<span id="cb1-4"><a href="#cb1-4"></a>                    <span class="dt">dates   =</span> <span class="kw">as.Date</span>(<span class="kw">c</span>(<span class="st">&quot;2012-01-01&quot;</span>, <span class="st">&quot;2011-12-31&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>                                          <span class="st">&quot;2012-01-01&quot;</span>)),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>                    <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>knitr<span class="op">::</span><span class="kw">kable</span>(fastDummies_example)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -422,8 +433,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>The object <strong>fastDummies_example</strong> has two character type columns, one integer column, and a Date column. By default, <code>dummy_cols()</code> will make dummy variables from factor or character columns only. This is because in most cases those are the only types of data you want dummy variables from. If those are the only columns you want, then the function takes your data set as the first parameter and returns a data.frame with the newly created variables appended to the end of the original data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example)</a>
-<a class="sourceLine" id="cb2-2" title="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(results)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -431,10 +442,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <th align="left">gender</th>
 <th align="left">animals</th>
 <th align="left">dates</th>
-<th align="right">gender_male</th>
 <th align="right">gender_female</th>
-<th align="right">animals_dog</th>
+<th align="right">gender_male</th>
 <th align="right">animals_cat</th>
+<th align="right">animals_dog</th>
 </tr>
 </thead>
 <tbody>
@@ -443,36 +454,36 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <td align="left">male</td>
 <td align="left">dog</td>
 <td align="left">2012-01-01</td>
-<td align="right">1</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="left">male</td>
 <td align="left">dog</td>
 <td align="left">2011-12-31</td>
-<td align="right">1</td>
 <td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
 <td align="left">female</td>
 <td align="left">cat</td>
 <td align="left">2012-01-01</td>
-<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">1</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
 <p>In some situations, you would want columns with types other than factor and character to generate dummy variables. For example, a column of years would be numeric but could be well-suited for making into dummy variables depending on your analysis. Use the <em>select_columns</em> parameter to select specific columns to make dummy variables from.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">select_columns =</span> <span class="st">&quot;numbers&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" title="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">select_columns =</span> <span class="st">&quot;numbers&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(results)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -516,8 +527,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </tbody>
 </table>
 <p>The final option for <code>dummy_cols()</code> is <em>remove_first_dummy</em> which by default is FALSE. If TRUE, it removes the first dummy variable created from each column. This is done to avoid multicollinearity in a multiple regression model caused by included all dummy variables. The “first” dummy variable is the one at the top of the rows (i.e. the first value that is not NA).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">remove_first_dummy =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2">knitr<span class="op">::</span><span class="kw">kable</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>results &lt;-<span class="st"> </span>fastDummies<span class="op">::</span><span class="kw">dummy_cols</span>(fastDummies_example, <span class="dt">remove_first_dummy =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>knitr<span class="op">::</span><span class="kw">kable</span>(results)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -525,8 +536,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <th align="left">gender</th>
 <th align="left">animals</th>
 <th align="left">dates</th>
-<th align="right">gender_female</th>
-<th align="right">animals_cat</th>
+<th align="right">gender_male</th>
+<th align="right">animals_dog</th>
 </tr>
 </thead>
 <tbody>
@@ -535,24 +546,24 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <td align="left">male</td>
 <td align="left">dog</td>
 <td align="left">2012-01-01</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
 <td align="left">male</td>
 <td align="left">dog</td>
 <td align="left">2011-12-31</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="right">3</td>
 <td align="left">female</td>
 <td align="left">cat</td>
 <td align="left">2012-01-01</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>

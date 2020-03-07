@@ -1,3 +1,8 @@
+# fastDummies 1.6.1
+
+* Bug fixes.
+* Dummy columns are now returned in alphabetical order. 
+
 # fastDummies 1.6.0
 
 * Adds the parameter `remove_selected_columns` to `dummy_columns()`. If TRUE (not default),

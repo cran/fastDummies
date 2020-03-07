@@ -107,9 +107,10 @@ dummy_cols <- function(.data,
       if (any(is.na(.data[[col_name]]))) {
         unique_vals <- c(unique_vals, NA)
       }
-      # Else by order values appear.
+      # Else by alphabetical order.
     } else {
       unique_vals <- unique(.data[[col_name]])
+      unique_vals <- stringi::stri_sort(unique_vals, na_last = TRUE, locale = "en_US")
     }
     unique_vals <- as.character(unique_vals)
 
@@ -152,9 +153,9 @@ dummy_cols <- function(.data,
 
       # Sets NA values to NA, only for columns that are not the NA columns
       if (!is.na(unique_value)) {
-      data.table::set(.data, i =
-                        which(is.na(.data[[col_name]])),
-                      j = paste0(col_name, "_", unique_value), value = NA)
+        data.table::set(.data, i =
+                          which(is.na(.data[[col_name]])),
+                        j = paste0(col_name, "_", unique_value), value = NA)
       }
 
       if (!is.null(split)) {

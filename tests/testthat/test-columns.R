@@ -30,7 +30,7 @@ sort_order_example <- data.frame(numbers = 1:12,
                                            "December",
                                            "November"))
 sort_order_example$month <- factor(sort_order_example$month,
-                                   levels = month.name)
+                                   levels = as.character(sort_order_example$month))
 
 
 sort_order_example2       <- sort_order_example
@@ -43,22 +43,6 @@ fastDummies_example2$animals <- as.character(fastDummies_example2$animals)
 
 test_that("The correct dummy columns are made - default", {
   expect_named(dummy_cols(sort_order_example),
-               c("numbers",
-                 "month",
-                 "month_January",
-                 "month_February",
-                 "month_March",
-                 "month_April",
-                 "month_May",
-                 "month_June",
-                 "month_July",
-                 "month_August",
-                 "month_September",
-                 "month_October",
-                 "month_November",
-                 "month_December"))
-
-  expect_named(dummy_cols(sort_order_example2),
                c("numbers",
                  "month",
                  "month_February",
@@ -74,7 +58,21 @@ test_that("The correct dummy columns are made - default", {
                  "month_December",
                  "month_November"))
 
-
+  expect_named(dummy_cols(sort_order_example2),
+               c("numbers",
+                 "month",
+                 "month_April",
+                 "month_August",
+                 "month_December",
+                 "month_February",
+                 "month_January",
+                 "month_July",
+                 "month_June",
+                 "month_March",
+                 "month_May",
+                 "month_November",
+                 "month_October",
+                 "month_September"))
 
 
   expect_named(dummy_cols(fastDummies_example),
@@ -91,10 +89,10 @@ test_that("The correct dummy columns are made - default", {
                  "gender",
                  "animals",
                  "dates",
-                 "gender_male",
                  "gender_female",
-                 "animals_dog",
-                 "animals_cat"))
+                 "gender_male",
+                 "animals_cat",
+                 "animals_dog"))
 
 
   expect_named(dummy_cols(fastDummies_example[, "gender", drop = FALSE]),
@@ -109,13 +107,13 @@ test_that("The correct dummy columns are made - default", {
 
   expect_named(dummy_cols(fastDummies_example2[, "gender", drop = FALSE]),
                c("gender",
-                 "gender_male",
-                 "gender_female"))
+                 "gender_female",
+                 "gender_male"))
 
   expect_named(dummy_cols(fastDummies_example2[, "animals", drop = FALSE]),
                c("animals",
-                 "animals_dog",
-                 "animals_cat"))
+                 "animals_cat",
+                 "animals_dog"))
 
 
 

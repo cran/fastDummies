@@ -1,4 +1,4 @@
-## ----echo=TRUE-----------------------------------------------------------
+## ----echo=TRUE----------------------------------------------------------------
 fastDummies_example <- data.frame(numbers = 1:3,
                     gender  = c("male", "male", "female"),
                     animals = c("dog", "dog", "cat"),
@@ -7,27 +7,27 @@ fastDummies_example <- data.frame(numbers = 1:3,
                     stringsAsFactors = FALSE)
 knitr::kable(fastDummies_example)
 
-## ----echo=TRUE-----------------------------------------------------------
+## ----echo=TRUE----------------------------------------------------------------
 results <- fastDummies::dummy_rows(fastDummies_example)
 knitr::kable(results)
 
-## ----echo=TRUE-----------------------------------------------------------
+## ----echo=TRUE----------------------------------------------------------------
 results <- fastDummies::dummy_rows(fastDummies_example, dummy_indicator = TRUE)
 knitr::kable(results)
 
-## ----echo=TRUE-----------------------------------------------------------
+## ----echo=TRUE----------------------------------------------------------------
 results1 <- fastDummies::dummy_rows(fastDummies_example, dummy_value = 0)
 results2 <- fastDummies::dummy_rows(fastDummies_example, dummy_value = "new value")
 knitr::kable(results1)
 knitr::kable(results2)
 
-## ----echo = TRUE---------------------------------------------------------
+## ----echo = TRUE--------------------------------------------------------------
 crime <- data.frame(city = c("SF", "SF", "NYC"),
                     year = c(1990, 2000, 1990),
                     crime = 1:3)
 knitr::kable(crime)
 
-## ----echo=TRUE-----------------------------------------------------------
+## ----echo=TRUE----------------------------------------------------------------
 results <- fastDummies::dummy_rows(crime, select_columns = c("city", "year"))
 knitr::kable(results)
 
