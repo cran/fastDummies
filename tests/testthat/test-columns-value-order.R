@@ -10,6 +10,16 @@ numeric_order <- data.frame(photos = c(1, 5, 7, 2, 40, 23, 12, 6, 1))
 
 test_that("Order of dummy columns (e.g. 0,0,1,0) is right", {
 
+
+  expect_equal(dummy_cols(1:3)$.data_1, c(1, 0, 0))
+  expect_equal(dummy_cols(1:3)$.data_2, c(0, 1, 0))
+  expect_equal(dummy_cols(1:3)$.data_3, c(0, 0, 1))
+
+  expect_equal(dummy_cols(c("a", "b", "c"))$.data_a, c(1, 0, 0))
+  expect_equal(dummy_cols(c("a", "b", "c"))$.data_b, c(0, 1, 0))
+  expect_equal(dummy_cols(c("a", "b", "c"))$.data_c, c(0, 0, 1))
+
+  expect_equal(dummy_cols(fastDummies_example)$gender_female, c(0, 0, 1))
   expect_equal(dummy_cols(fastDummies_example)$gender_male, c(1, 1, 0))
   expect_equal(dummy_cols(fastDummies_example)$gender_female, c(0, 0, 1))
   expect_equal(dummy_cols(fastDummies_example,
